@@ -40,6 +40,11 @@ public class NewsListPresenter extends BasePresenter<NewsListView> {
         loadNews(false);
     }
 
+    public void retry() {
+        getViewState().hideFatalError();
+        loadNews(false);
+    }
+
     public void onSwipeToRefresh() {
         loadNews(true);
     }
@@ -78,4 +83,5 @@ public class NewsListPresenter extends BasePresenter<NewsListView> {
                     }
                 }));
     }
+
 }

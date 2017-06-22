@@ -33,6 +33,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
 
     @InjectPresenter
     MainPresenter presenter;
+
     private Navigator navigator = new SupportFragmentNavigator(
             getSupportFragmentManager(), R.id.container) {
         @Override

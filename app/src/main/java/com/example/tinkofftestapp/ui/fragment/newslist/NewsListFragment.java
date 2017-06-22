@@ -9,7 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import com.arellomobile.mvp.MvpAppCompatFragment;
 import com.arellomobile.mvp.presenter.InjectPresenter;
@@ -24,6 +24,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 
 public class NewsListFragment extends MvpAppCompatFragment implements NewsListView {
@@ -36,6 +37,12 @@ public class NewsListFragment extends MvpAppCompatFragment implements NewsListVi
 
     @BindView(R.id.progressBar)
     ProgressBar progressBar;
+
+    @BindView(R.id.errorView)
+    View errorView;
+
+    @BindView(R.id.tvErrorMessage)
+    TextView fatalErrorTextView;
 
     @InjectPresenter
     NewsListPresenter presenter;
@@ -85,14 +92,24 @@ public class NewsListFragment extends MvpAppCompatFragment implements NewsListVi
 
     @Override
     public void setItems(List<News> items) {
-        if (items != null) {
-            adapter.set(items);
-        }
+        adapter.set(items);
     }
 
     @Override
     public void showFatalError(String message) {
-        Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+        errorView.setVisibility(View.VISIBLE);
+
+        fatalErrorTextView.setText(message);
+    }
+
+    @Override
+    public void hideFatalError() {
+        errorView.setVisibility(View.GONE);
+    }
+
+    @OnClick(R.id.btnRetry)
+    void onRetryClick() {
+        presenter.retry();
     }
 }
 
