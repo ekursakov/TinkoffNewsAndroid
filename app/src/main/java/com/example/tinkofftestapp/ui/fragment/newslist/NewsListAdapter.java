@@ -10,13 +10,18 @@ import android.widget.TextView;
 import com.example.tinkofftestapp.R;
 import com.example.tinkofftestapp.data.model.News;
 
+import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.ViewHolder> {
+    private static final SimpleDateFormat NEWS_DATE_FORMAT
+            = new SimpleDateFormat("d MMM, HH:mm", Locale.getDefault());
+
     private List<News> items = Collections.emptyList();
 
     @Override
@@ -60,7 +65,7 @@ class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.ViewHolder> {
         }
 
         void bind(News news) {
-            dateTextView.setText(news.getPublicationDate().toString());
+            dateTextView.setText(NEWS_DATE_FORMAT.format(news.getPublicationDate()));
             titleTextView.setText(Html.fromHtml(news.getText()));
         }
     }
