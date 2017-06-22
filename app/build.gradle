@@ -9,18 +9,61 @@ android {
         targetSdkVersion 25
         versionCode 1
         versionName "1.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
     }
+
     buildTypes {
+        debug {
+            minifyEnabled true
+            useProguard false
+        }
         release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            minifyEnabled true
+            shrinkResources true
         }
     }
 }
 
+ext {
+    supportLibsVersion = '25.4.0'
+    butterKnifeVersion = '8.6.0'
+    moxyVersion = '1.5.3'
+    retrofitVersion = '2.2.0'
+    gsonVersion = '2.8.0'
+    daggerVersion = '2.8'
+}
+
 dependencies {
-    compile 'com.android.support:appcompat-v7:25.3.1'
+    // Support libs
+    compile "com.android.support:appcompat-v7:$supportLibsVersion"
+    compile "com.android.support:design:$supportLibsVersion"
+
+    // ButterKnife
+    compile "com.jakewharton:butterknife:$butterKnifeVersion"
+    annotationProcessor "com.jakewharton:butterknife-compiler:$butterKnifeVersion"
+
+    // Moxy
+    compile "com.arello-mobile:moxy:$moxyVersion"
+    compile "com.arello-mobile:moxy-app-compat:$moxyVersion"
+    annotationProcessor "com.arello-mobile:moxy-compiler:$moxyVersion"
+
+    // Cicerone (navigation)
+    compile 'ru.terrakok.cicerone:cicerone:1.1'
+
+    // DI
+    compile "com.google.dagger:dagger:$daggerVersion"
+    annotationProcessor "com.google.dagger:dagger-compiler:$daggerVersion"
+
+    // Rx
+    compile "io.reactivex.rxjava2:rxjava:2.1.0"
+    compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
+
+    // Network
+    compile "com.squareup.retrofit2:retrofit:$retrofitVersion"
+    compile "com.squareup.retrofit2:adapter-rxjava2:$retrofitVersion"
+    compile "com.squareup.retrofit2:converter-gson:$retrofitVersion"
+    compile "com.google.code.gson:gson:$gsonVersion"
 
     testCompile 'junit:junit:4.12'
 }
