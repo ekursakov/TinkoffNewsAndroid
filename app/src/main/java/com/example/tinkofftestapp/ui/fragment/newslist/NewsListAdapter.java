@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.tinkofftestapp.R;
-import com.example.tinkofftestapp.data.model.News;
+import com.example.tinkofftestapp.data.model.NewsTitle;
 
 import java.text.SimpleDateFormat;
 import java.util.Collections;
@@ -22,17 +22,23 @@ class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.ViewHolder> {
     private static final SimpleDateFormat NEWS_DATE_FORMAT
             = new SimpleDateFormat("d MMM, HH:mm", Locale.getDefault());
 
-    private List<News> items = Collections.emptyList();
+    private final ItemInteractionListener listener;
+    private List<NewsTitle> items = Collections.emptyList();
+
+    NewsListAdapter(ItemInteractionListener listener) {
+        this.listener = listener;
+    }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
-        return new ViewHolder(layoutInflater.inflate(R.layout.item_news, parent, false));
+        View view = layoutInflater.inflate(R.layout.item_news, parent, false);
+        return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.bind(items.get(position));
+        holder.bind(items.get(position), listener);
     }
 
     @Override
@@ -40,7 +46,7 @@ class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.ViewHolder> {
         return items.size();
     }
 
-    void set(List<News> newItems) {
+    void set(List<NewsTitle> newItems) {
         if (newItems != null) {
             items = newItems;
         } else {
@@ -50,6 +56,9 @@ class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.ViewHolder> {
         notifyDataSetChanged();
     }
 
+    interface ItemInteractionListener {
+        void onNewsClick(NewsTitle newsTitle);
+    }
 
     class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -64,9 +73,15 @@ class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.ViewHolder> {
             ButterKnife.bind(this, itemView);
         }
 
-        void bind(News news) {
+        void bind(NewsTitle news, ItemInteractionListener listener) {
             dateTextView.setText(NEWS_DATE_FORMAT.format(news.getPublicationDate()));
             titleTextView.setText(Html.fromHtml(news.getText()));
+
+            itemView.setOnClickListener(v -> {
+                if (listener != null) {
+                    listener.onNewsClick(news);
+                }
+            });
         }
     }
 }

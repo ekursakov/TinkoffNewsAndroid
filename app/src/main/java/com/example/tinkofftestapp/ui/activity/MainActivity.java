@@ -12,6 +12,7 @@ import com.example.tinkofftestapp.App;
 import com.example.tinkofftestapp.R;
 import com.example.tinkofftestapp.presentation.main.MainPresenter;
 import com.example.tinkofftestapp.presentation.main.MainView;
+import com.example.tinkofftestapp.ui.fragment.newsdetail.NewsDetailFragment;
 import com.example.tinkofftestapp.ui.fragment.newslist.NewsListFragment;
 import com.example.tinkofftestapp.ui.navigation.Screens;
 
@@ -41,8 +42,15 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
             switch (screenKey) {
                 case Screens.NEWS_LIST:
                     return new NewsListFragment();
-//                case Screens.NEWS_CONTENT:
-//                    return new NewsContentFragment();
+                case Screens.NEWS_CONTENT: {
+                    NewsDetailFragment fragment = new NewsDetailFragment();
+
+                    Bundle args = new Bundle();
+                    args.putString(NewsDetailFragment.ARG_NEWS_ID, (String) data);
+                    fragment.setArguments(args);
+
+                    return fragment;
+                }
                 default:
                     throw new IllegalStateException("Navigating to unknown screen: " + screenKey);
             }

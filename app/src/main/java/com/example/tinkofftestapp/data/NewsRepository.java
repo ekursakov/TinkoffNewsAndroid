@@ -1,6 +1,7 @@
 package com.example.tinkofftestapp.data;
 
-import com.example.tinkofftestapp.data.model.News;
+import com.example.tinkofftestapp.data.model.NewsContent;
+import com.example.tinkofftestapp.data.model.NewsTitle;
 import com.example.tinkofftestapp.data.network.TinkoffApiException;
 import com.example.tinkofftestapp.data.network.TinkoffApiService;
 import com.example.tinkofftestapp.data.network.model.ApiResult;
@@ -19,8 +20,15 @@ public class NewsRepository {
         this.apiService = apiService;
     }
 
-    public Single<List<News>> getNewsList(boolean force) {
-        return apiService.getNews(force ? "no-cache" : null)
+    public Single<List<NewsTitle>> getNewsList(boolean force) {
+        return apiService
+                .getNews(force ? "no-cache" : null)
+                .map(this::handleServerError);
+    }
+
+    public Single<NewsContent> getNewsContent(String id, boolean force) {
+        return apiService
+                .getNewsContent(id, force ? "no-cache" : null)
                 .map(this::handleServerError);
     }
 

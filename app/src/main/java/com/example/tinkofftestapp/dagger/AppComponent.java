@@ -2,6 +2,7 @@ package com.example.tinkofftestapp.dagger;
 
 
 import com.example.tinkofftestapp.presentation.main.MainPresenter;
+import com.example.tinkofftestapp.presentation.newsdetail.NewsDetailPresenter;
 import com.example.tinkofftestapp.presentation.newslist.NewsListPresenter;
 import com.example.tinkofftestapp.ui.activity.MainActivity;
 
@@ -18,4 +19,6 @@ public interface AppComponent {
     Provider<MainPresenter> mainPresenterProvider();
 
     Provider<NewsListPresenter> newsListPresenterProvider();
+
+    Provider<NewsDetailPresenter> newsDetailPresenterProvider();
 }

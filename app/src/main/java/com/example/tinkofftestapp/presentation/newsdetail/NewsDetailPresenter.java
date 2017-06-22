@@ -1,16 +1,9 @@
-package com.example.tinkofftestapp.presentation.newslist;
+package com.example.tinkofftestapp.presentation.newsdetail;
 
 import com.arellomobile.mvp.InjectViewState;
 import com.example.tinkofftestapp.data.ErrorMessageResolver;
 import com.example.tinkofftestapp.data.NewsRepository;
-import com.example.tinkofftestapp.data.model.NewsTitle;
 import com.example.tinkofftestapp.presentation.BasePresenter;
-import com.example.tinkofftestapp.ui.navigation.Screens;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
 
 import javax.inject.Inject;
 
@@ -19,50 +12,48 @@ import ru.terrakok.cicerone.Router;
 import timber.log.Timber;
 
 @InjectViewState
-public class NewsListPresenter extends BasePresenter<NewsListView> {
-    private static final Comparator<NewsTitle> NEWS_COMPARATOR
-            = (o1, o2) -> o1.getPublicationDate().compareTo(o2.getPublicationDate());
-
+public class NewsDetailPresenter extends BasePresenter<NewsDetailView> {
     private final NewsRepository newsRepository;
     private final Router router;
     private final ErrorMessageResolver errorMessageResolver;
 
+    private String newsId;
+
     @Inject
-    public NewsListPresenter(NewsRepository newsRepository,
-                             Router router,
-                             ErrorMessageResolver errorMessageResolver) {
+    public NewsDetailPresenter(NewsRepository newsRepository,
+                               Router router,
+                               ErrorMessageResolver errorMessageResolver) {
         this.newsRepository = newsRepository;
         this.router = router;
         this.errorMessageResolver = errorMessageResolver;
     }
 
+    public void setNewsId(String newsId) {
+        this.newsId = newsId;
+    }
+
     @Override
     protected void onFirstViewAttach() {
-        loadNews(false);
+        loadData(false);
     }
 
     public void retry() {
         getViewState().hideFatalError();
-        loadNews(false);
+        loadData(false);
     }
 
     public void onSwipeToRefresh() {
-        loadNews(true);
+        loadData(true);
     }
 
-    private void loadNews(final boolean swipeToRefresh) {
+    private void loadData(final boolean swipeToRefresh) {
         if (swipeToRefresh) {
             getViewState().setRefreshing(true);
         } else {
             getViewState().setLoading(true);
         }
 
-        destroyOnDispose(newsRepository.getNewsList(swipeToRefresh)
-                .map(newsList -> {
-                    List<NewsTitle> sortedList = new ArrayList<>(newsList);
-                    Collections.sort(sortedList, Collections.reverseOrder(NEWS_COMPARATOR));
-                    return sortedList;
-                })
+        destroyOnDispose(newsRepository.getNewsContent(newsId, swipeToRefresh)
                 .observeOn(AndroidSchedulers.mainThread())
                 .doAfterTerminate(() -> {
                     if (swipeToRefresh) {
@@ -71,21 +62,18 @@ public class NewsListPresenter extends BasePresenter<NewsListView> {
                         getViewState().setLoading(false);
                     }
                 })
-                .subscribe(newsList -> {
-                    getViewState().setItems(newsList);
+                .subscribe(newsContent -> {
+                    getViewState().setContent(newsContent);
                 }, e -> {
                     Timber.w(e);
                     String errorMessage = errorMessageResolver.getErrorMessage(e);
                     if (swipeToRefresh) {
                         router.showSystemMessage(errorMessage);
                     } else {
-                        getViewState().setItems(null);
+                        getViewState().setContent(null);
                         getViewState().showFatalError(errorMessage);
                     }
                 }));
     }
 
-    public void onNewsClick(NewsTitle newsTitle) {
-        router.navigateTo(Screens.NEWS_CONTENT, newsTitle.getId());
-    }
 }

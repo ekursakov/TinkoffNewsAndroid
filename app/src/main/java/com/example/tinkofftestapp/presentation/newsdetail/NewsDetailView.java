@@ -1,21 +1,19 @@
-package com.example.tinkofftestapp.presentation.newslist;
+package com.example.tinkofftestapp.presentation.newsdetail;
 
 import com.arellomobile.mvp.MvpView;
 import com.arellomobile.mvp.viewstate.strategy.AddToEndSingleStrategy;
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
-import com.example.tinkofftestapp.data.model.NewsTitle;
+import com.example.tinkofftestapp.data.model.NewsContent;
 import com.example.tinkofftestapp.util.AddToEndSingleByTagStateStrategy;
 
-import java.util.List;
-
 @StateStrategyType(AddToEndSingleStrategy.class)
-public interface NewsListView extends MvpView {
+public interface NewsDetailView extends MvpView {
 
     void setLoading(boolean isLoading);
 
     void setRefreshing(boolean isRefreshing);
 
-    void setItems(List<NewsTitle> newsList);
+    void setContent(NewsContent newsContent);
 
     @StateStrategyType(value = AddToEndSingleByTagStateStrategy.class, tag = "fatalError")
     void showFatalError(String message);

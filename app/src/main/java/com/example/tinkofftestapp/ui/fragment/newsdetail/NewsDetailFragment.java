@@ -1,10 +1,9 @@
-package com.example.tinkofftestapp.ui.fragment.newslist;
+package com.example.tinkofftestapp.ui.fragment.newsdetail;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,25 +15,20 @@ import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.example.tinkofftestapp.App;
 import com.example.tinkofftestapp.R;
-import com.example.tinkofftestapp.data.model.NewsTitle;
-import com.example.tinkofftestapp.presentation.newslist.NewsListPresenter;
-import com.example.tinkofftestapp.presentation.newslist.NewsListView;
-
-import java.util.List;
+import com.example.tinkofftestapp.data.model.NewsContent;
+import com.example.tinkofftestapp.presentation.newsdetail.NewsDetailPresenter;
+import com.example.tinkofftestapp.presentation.newsdetail.NewsDetailView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 
-public class NewsListFragment extends MvpAppCompatFragment
-        implements NewsListView, NewsListAdapter.ItemInteractionListener {
+public class NewsDetailFragment extends MvpAppCompatFragment implements NewsDetailView {
+    public static final String ARG_NEWS_ID = "ARG_NEWS_ID";
 
     @BindView(R.id.swipeRefreshLayout)
     SwipeRefreshLayout swipeRefreshLayout;
-
-    @BindView(R.id.rvNewsList)
-    RecyclerView newsRecyclerView;
 
     @BindView(R.id.progressBar)
     ProgressBar progressBar;
@@ -42,17 +36,20 @@ public class NewsListFragment extends MvpAppCompatFragment
     @BindView(R.id.errorView)
     View errorView;
 
+    @BindView(R.id.tvContent)
+    TextView contentTextView;
+
     @BindView(R.id.tvErrorMessage)
     TextView fatalErrorTextView;
 
     @InjectPresenter
-    NewsListPresenter presenter;
-
-    private NewsListAdapter adapter = new NewsListAdapter(this);
+    NewsDetailPresenter presenter;
 
     @ProvidePresenter
-    NewsListPresenter providePresenter() {
-        return App.getAppComponent().newsListPresenterProvider().get();
+    NewsDetailPresenter providePresenter() {
+        NewsDetailPresenter presenter = App.getAppComponent().newsDetailPresenterProvider().get();
+        presenter.setNewsId(getArguments().getString(ARG_NEWS_ID));
+        return presenter;
     }
 
     @Nullable
@@ -60,7 +57,7 @@ public class NewsListFragment extends MvpAppCompatFragment
     public View onCreateView(LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_news_list, container, false);
+        return inflater.inflate(R.layout.fragment_news_detail, container, false);
     }
 
     @Override
@@ -73,10 +70,6 @@ public class NewsListFragment extends MvpAppCompatFragment
     }
 
     private void initViews() {
-        newsRecyclerView.setAdapter(adapter);
-        newsRecyclerView.addItemDecoration(
-                new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
-
         swipeRefreshLayout.setColorSchemeResources(R.color.colorAccent);
         swipeRefreshLayout.setOnRefreshListener(() -> presenter.onSwipeToRefresh());
     }
@@ -92,8 +85,12 @@ public class NewsListFragment extends MvpAppCompatFragment
     }
 
     @Override
-    public void setItems(List<NewsTitle> items) {
-        adapter.set(items);
+    public void setContent(NewsContent newsContent) {
+        if (newsContent != null) {
+            contentTextView.setText(Html.fromHtml(newsContent.getContent()));
+        } else {
+            contentTextView.setText("");
+        }
     }
 
     @Override
@@ -111,11 +108,6 @@ public class NewsListFragment extends MvpAppCompatFragment
     @OnClick(R.id.btnRetry)
     void onRetryClick() {
         presenter.retry();
-    }
-
-    @Override
-    public void onNewsClick(NewsTitle newsTitle) {
-        presenter.onNewsClick(newsTitle);
     }
 }
 

@@ -2,14 +2,14 @@ package com.example.tinkofftestapp.data.model;
 
 import java.util.Date;
 
-public class News {
+public class NewsTitle {
     private final String id;
     private final String name;
     private final String text;
     private final Date publicationDate;
     private final Integer bankInfoTypeId;
 
-    public News(String id, String name, String text, Date publicationDate, Integer bankInfoTypeId) {
+    public NewsTitle(String id, String name, String text, Date publicationDate, Integer bankInfoTypeId) {
         this.id = id;
         this.name = name;
         this.text = text;
