@@ -1,6 +1,7 @@
 package com.example.tinkofftestapp.data.network;
 
 import com.example.tinkofftestapp.data.model.News;
+import com.example.tinkofftestapp.data.network.model.ApiResult;
 
 import java.util.List;
 
@@ -12,5 +13,5 @@ public interface TinkoffApiService {
     String BASE_URL = "https://api.tinkoff.ru/v1/";
 
     @GET("news")
-    Single<Result<List<News>>> getNews(@Header("Cache-Control") String cacheControlHeader);
+    Single<ApiResult<List<News>>> getNews(@Header("Cache-Control") String cacheControlHeader);
 }

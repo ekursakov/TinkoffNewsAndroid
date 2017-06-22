@@ -1,9 +1,9 @@
 package com.example.tinkofftestapp.data;
 
 import com.example.tinkofftestapp.data.model.News;
-import com.example.tinkofftestapp.data.network.Result;
 import com.example.tinkofftestapp.data.network.TinkoffApiException;
 import com.example.tinkofftestapp.data.network.TinkoffApiService;
+import com.example.tinkofftestapp.data.network.model.ApiResult;
 
 import java.util.List;
 
@@ -24,7 +24,7 @@ public class NewsRepository {
                 .map(this::handleServerError);
     }
 
-    private <T> T handleServerError(Result<T> result) {
+    private <T> T handleServerError(ApiResult<T> result) {
         if ("OK".equals(result.getResultCode())) {
             return result.getPayload();
         } else {

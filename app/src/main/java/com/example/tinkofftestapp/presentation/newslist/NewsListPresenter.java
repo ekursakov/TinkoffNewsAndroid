@@ -19,18 +19,8 @@ import timber.log.Timber;
 
 @InjectViewState
 public class NewsListPresenter extends BasePresenter<NewsListView> {
-    private static final Comparator<News> NEWS_COMPARATOR = (News o1, News o2) -> {
-        long time1 = o1.getPublicationDate().getMilliseconds();
-        long time2 = o2.getPublicationDate().getMilliseconds();
-
-        if (time1 > time2) {
-            return 1;
-        } else if (time1 == time2) {
-            return 0;
-        } else {
-            return -1;
-        }
-    };
+    private static final Comparator<News> NEWS_COMPARATOR
+            = (o1, o2) -> o1.getPublicationDate().compareTo(o2.getPublicationDate());
 
     private final NewsRepository newsRepository;
     private final Router router;

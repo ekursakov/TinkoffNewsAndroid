@@ -1,9 +1,9 @@
-package com.example.tinkofftestapp.data.model;
+package com.example.tinkofftestapp.data.network.model;
 
-public class ApiDate {
+public class DateJson {
     private final long milliseconds;
 
-    public ApiDate(long milliseconds) {
+    public DateJson(long milliseconds) {
         this.milliseconds = milliseconds;
     }
 

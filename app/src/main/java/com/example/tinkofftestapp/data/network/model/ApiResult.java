@@ -1,10 +1,10 @@
-package com.example.tinkofftestapp.data.network;
+package com.example.tinkofftestapp.data.network.model;
 
-public class Result<T> {
+public class ApiResult<T> {
     private final String resultCode;
     private final T payload;
 
-    public Result(String resultCode, T payload) {
+    public ApiResult(String resultCode, T payload) {
         this.resultCode = resultCode;
         this.payload = payload;
     }
