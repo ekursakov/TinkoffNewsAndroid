@@ -1,39 +1,91 @@
 package com.example.tinkofftestapp.presentation.newslist;
 
 import com.arellomobile.mvp.InjectViewState;
+import com.example.tinkofftestapp.data.ErrorMessageResolver;
 import com.example.tinkofftestapp.data.NewsRepository;
+import com.example.tinkofftestapp.data.model.News;
 import com.example.tinkofftestapp.presentation.BasePresenter;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 import javax.inject.Inject;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import ru.terrakok.cicerone.Router;
+import timber.log.Timber;
 
 @InjectViewState
 public class NewsListPresenter extends BasePresenter<NewsListView> {
+    private static final Comparator<News> NEWS_COMPARATOR = (News o1, News o2) -> {
+        long time1 = o1.getPublicationDate().getMilliseconds();
+        long time2 = o2.getPublicationDate().getMilliseconds();
+
+        if (time1 > time2) {
+            return 1;
+        } else if (time1 == time2) {
+            return 0;
+        } else {
+            return -1;
+        }
+    };
+
     private final NewsRepository newsRepository;
+    private final Router router;
+    private final ErrorMessageResolver errorMessageResolver;
 
     @Inject
-    public NewsListPresenter(NewsRepository newsRepository) {
+    public NewsListPresenter(NewsRepository newsRepository,
+                             Router router,
+                             ErrorMessageResolver errorMessageResolver) {
         this.newsRepository = newsRepository;
+        this.router = router;
+        this.errorMessageResolver = errorMessageResolver;
     }
 
     @Override
     protected void onFirstViewAttach() {
-        getViewState().setLoading(true);
-        newsRepository.getNewsList()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(newsList -> {
-                    getViewState().setItems(newsList);
-
-                    getViewState().setLoading(false);
-                }, e -> {
-                    // TODO: error
-                    getViewState().setLoading(false);
-                });
+        loadNews(false);
     }
 
     public void onSwipeToRefresh() {
-        // TODO
-        getViewState().setRefreshing(false);
+        loadNews(true);
+    }
+
+    private void loadNews(final boolean swipeToRefresh) {
+        if (swipeToRefresh) {
+            getViewState().setRefreshing(true);
+        } else {
+            getViewState().setLoading(true);
+        }
+
+        destroyOnDispose(newsRepository.getNewsList(swipeToRefresh)
+                .map(newsList -> {
+                    List<News> sortedList = new ArrayList<>(newsList);
+                    Collections.sort(sortedList, Collections.reverseOrder(NEWS_COMPARATOR));
+                    return sortedList;
+                })
+                .observeOn(AndroidSchedulers.mainThread())
+                .doAfterTerminate(() -> {
+                    if (swipeToRefresh) {
+                        getViewState().setRefreshing(false);
+                    } else {
+                        getViewState().setLoading(false);
+                    }
+                })
+                .subscribe(newsList -> {
+                    getViewState().setItems(newsList);
+                }, e -> {
+                    Timber.w(e);
+                    String errorMessage = errorMessageResolver.getErrorMessage(e);
+                    if (swipeToRefresh) {
+                        router.showSystemMessage(errorMessage);
+                    } else {
+                        getViewState().setItems(null);
+                        getViewState().showFatalError(errorMessage);
+                    }
+                }));
     }
 }

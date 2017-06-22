@@ -60,7 +60,7 @@ class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.ViewHolder> {
         }
 
         void bind(News news) {
-            dateTextView.setText(news.getPublicationDate().getMilliseconds().toString());
+            dateTextView.setText(String.valueOf(news.getPublicationDate().getMilliseconds()));
             titleTextView.setText(Html.fromHtml(news.getText()));
         }
     }

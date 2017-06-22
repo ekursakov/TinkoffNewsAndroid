@@ -19,8 +19,8 @@ public class NewsRepository {
         this.apiService = apiService;
     }
 
-    public Single<List<News>> getNewsList() {
-        return apiService.getNews()
+    public Single<List<News>> getNewsList(boolean force) {
+        return apiService.getNews(force ? "no-cache" : null)
                 .map(this::handleServerError);
     }
 

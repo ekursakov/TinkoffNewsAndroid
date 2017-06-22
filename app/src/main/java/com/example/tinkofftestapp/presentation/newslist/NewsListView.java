@@ -15,4 +15,6 @@ public interface NewsListView extends MvpView {
     void setRefreshing(boolean isRefreshing);
 
     void setItems(List<News> newsList);
+
+    void showFatalError(String message);
 }

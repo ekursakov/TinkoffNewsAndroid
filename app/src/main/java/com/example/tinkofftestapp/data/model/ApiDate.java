@@ -1,13 +1,13 @@
 package com.example.tinkofftestapp.data.model;
 
 public class ApiDate {
-    private final Long milliseconds;
+    private final long milliseconds;
 
-    public ApiDate(Long milliseconds) {
+    public ApiDate(long milliseconds) {
         this.milliseconds = milliseconds;
     }
 
-    public Long getMilliseconds() {
+    public long getMilliseconds() {
         return milliseconds;
     }
 }

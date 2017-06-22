@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.arellomobile.mvp.MvpAppCompatFragment;
 import com.arellomobile.mvp.presenter.InjectPresenter;
@@ -87,6 +88,11 @@ public class NewsListFragment extends MvpAppCompatFragment implements NewsListVi
         if (items != null) {
             adapter.set(items);
         }
+    }
+
+    @Override
+    public void showFatalError(String message) {
+        Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
     }
 }
 
