@@ -3,11 +3,10 @@ package com.example.tinkofftestapp.ui.fragment.newsdetail;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.text.Html;
-import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -37,8 +36,8 @@ public class NewsDetailFragment extends MvpAppCompatFragment implements NewsDeta
     @BindView(R.id.errorView)
     View errorView;
 
-    @BindView(R.id.tvContent)
-    TextView contentTextView;
+    @BindView(R.id.contentWebView)
+    WebView contentWebView;
 
     @BindView(R.id.tvErrorMessage)
     TextView fatalErrorTextView;
@@ -97,10 +96,8 @@ public class NewsDetailFragment extends MvpAppCompatFragment implements NewsDeta
         if (newsContent != null) {
             swipeRefreshLayout.setVisibility(View.VISIBLE);
 
-            String title = Html.fromHtml(newsContent.getTitle().getText()).toString();
-            Spanned content = Html.fromHtml(newsContent.getContent());
-
-            contentTextView.setText(content);
+            contentWebView.setVisibility(View.VISIBLE);
+            contentWebView.loadData(newsContent.getContent(), "text/html", "UTF-8");
         } else {
             swipeRefreshLayout.setVisibility(View.GONE);
         }
