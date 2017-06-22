@@ -1,4 +1,16 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+
+    dependencies {
+        classpath 'me.tatarka:gradle-retrolambda:3.6.1'
+    }
+}
+
+
 apply plugin: 'com.android.application'
+apply plugin: 'me.tatarka.retrolambda'
 
 android {
     compileSdkVersion 25
@@ -23,6 +35,11 @@ android {
             shrinkResources true
         }
     }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 ext {
@@ -30,7 +47,7 @@ ext {
     butterKnifeVersion = '8.6.0'
     moxyVersion = '1.5.3'
     retrofitVersion = '2.2.0'
-    gsonVersion = '2.8.0'
+    moshiVersion = '1.5.0'
     daggerVersion = '2.8'
 }
 
@@ -38,6 +55,7 @@ dependencies {
     // Support libs
     compile "com.android.support:appcompat-v7:$supportLibsVersion"
     compile "com.android.support:design:$supportLibsVersion"
+    compile "com.android.support:recyclerview-v7:$supportLibsVersion"
 
     // ButterKnife
     compile "com.jakewharton:butterknife:$butterKnifeVersion"
@@ -62,8 +80,12 @@ dependencies {
     // Network
     compile "com.squareup.retrofit2:retrofit:$retrofitVersion"
     compile "com.squareup.retrofit2:adapter-rxjava2:$retrofitVersion"
-    compile "com.squareup.retrofit2:converter-gson:$retrofitVersion"
-    compile "com.google.code.gson:gson:$gsonVersion"
+    compile "com.squareup.retrofit2:converter-moshi:$retrofitVersion"
+    compile "com.squareup.moshi:moshi:$moshiVersion"
 
+    // Log
+    compile 'com.jakewharton.timber:timber:4.5.1'
+
+    // Test
     testCompile 'junit:junit:4.12'
 }
