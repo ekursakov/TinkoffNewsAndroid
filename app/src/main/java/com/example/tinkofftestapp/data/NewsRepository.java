@@ -15,6 +15,8 @@ import io.reactivex.Single;
 
 @Singleton
 public class NewsRepository {
+    private static final String CACHE_CONTROL_FORCE_NETWORK = "no-cache";
+
     private final TinkoffApiService apiService;
 
     @Inject
@@ -24,13 +26,13 @@ public class NewsRepository {
 
     public Single<List<NewsTitle>> getNewsList(boolean force) {
         return apiService
-                .getNews(force ? "no-cache" : null)
+                .getNews(force ? CACHE_CONTROL_FORCE_NETWORK : null)
                 .map(this::handleServerError);
     }
 
     public Single<NewsContent> getNewsContent(String id, boolean force) {
         return apiService
-                .getNewsContent(id, force ? "no-cache" : null)
+                .getNewsContent(id, force ? CACHE_CONTROL_FORCE_NETWORK : null)
                 .map(this::handleServerError);
     }
 

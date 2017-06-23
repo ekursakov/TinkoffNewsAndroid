@@ -20,7 +20,7 @@ import butterknife.ButterKnife;
 
 class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.ViewHolder> {
     private static final SimpleDateFormat NEWS_DATE_FORMAT
-            = new SimpleDateFormat("d MMM, HH:mm", Locale.getDefault());
+            = new SimpleDateFormat("d MMMM yyyy, HH:mm", Locale.getDefault());
 
     private final ItemInteractionListener listener;
     private List<NewsTitle> items = Collections.emptyList();
