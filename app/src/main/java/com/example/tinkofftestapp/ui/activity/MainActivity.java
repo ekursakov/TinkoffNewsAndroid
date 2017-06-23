@@ -110,13 +110,6 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
         super.onPause();
     }
 
-    public void setToolbarTitle(String newTitle) {
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar == null) return;
-
-        actionBar.setTitle(newTitle);
-    }
-
     private void updateToolbarBackButton() {
         ActionBar actionBar = getSupportActionBar();
         if (actionBar == null) return;

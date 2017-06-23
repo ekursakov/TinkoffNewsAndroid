@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.arellomobile.mvp.MvpAppCompatFragment;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.example.tinkofftestapp.App;
@@ -18,14 +19,13 @@ import com.example.tinkofftestapp.R;
 import com.example.tinkofftestapp.data.model.NewsContent;
 import com.example.tinkofftestapp.presentation.newsdetail.NewsDetailPresenter;
 import com.example.tinkofftestapp.presentation.newsdetail.NewsDetailView;
-import com.example.tinkofftestapp.ui.fragment.BaseFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 
-public class NewsDetailFragment extends BaseFragment implements NewsDetailView {
+public class NewsDetailFragment extends MvpAppCompatFragment implements NewsDetailView {
     public static final String ARG_NEWS_ID = "ARG_NEWS_ID";
 
     @BindView(R.id.swipeRefreshLayout)
@@ -74,7 +74,7 @@ public class NewsDetailFragment extends BaseFragment implements NewsDetailView {
     public void onStart() {
         super.onStart();
 
-        setToolbarTitle(getString(R.string.title_news_detail));
+        getActivity().setTitle(getString(R.string.title_news_detail));
     }
 
     private void initViews() {
