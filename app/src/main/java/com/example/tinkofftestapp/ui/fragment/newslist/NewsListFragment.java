@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.arellomobile.mvp.MvpAppCompatFragment;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.example.tinkofftestapp.App;
@@ -19,6 +18,7 @@ import com.example.tinkofftestapp.R;
 import com.example.tinkofftestapp.data.model.NewsTitle;
 import com.example.tinkofftestapp.presentation.newslist.NewsListPresenter;
 import com.example.tinkofftestapp.presentation.newslist.NewsListView;
+import com.example.tinkofftestapp.ui.fragment.BaseFragment;
 
 import java.util.List;
 
@@ -27,7 +27,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 
-public class NewsListFragment extends MvpAppCompatFragment
+public class NewsListFragment extends BaseFragment
         implements NewsListView, NewsListAdapter.ItemInteractionListener {
 
     @BindView(R.id.swipeRefreshLayout)
@@ -70,6 +70,13 @@ public class NewsListFragment extends MvpAppCompatFragment
         ButterKnife.bind(this, view);
 
         initViews();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        setToolbarTitle(getString(R.string.app_name));
     }
 
     private void initViews() {

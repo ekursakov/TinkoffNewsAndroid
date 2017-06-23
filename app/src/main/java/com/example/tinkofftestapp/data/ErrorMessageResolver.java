@@ -8,9 +8,11 @@ import com.example.tinkofftestapp.data.network.TinkoffApiException;
 import java.io.IOException;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import retrofit2.HttpException;
 
+@Singleton
 public class ErrorMessageResolver {
     private final Context context;
 

@@ -2,6 +2,8 @@ package com.example.tinkofftestapp.ui.activity;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.widget.Toast;
 
@@ -67,6 +69,10 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
         }
     };
 
+    private FragmentManager.OnBackStackChangedListener onBackStackChangedListener
+            = this::updateToolbarBackButton;
+
+
     @ProvidePresenter
     MainPresenter providePresenter() {
         return App.getAppComponent().mainPresenterProvider().get();
@@ -81,6 +87,10 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
         ButterKnife.bind(this);
 
         setSupportActionBar(toolbar);
+
+        toolbar.setNavigationOnClickListener(v -> onBackPressed());
+
+        updateToolbarBackButton();
     }
 
     @Override
@@ -88,12 +98,33 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
         super.onResumeFragments();
 
         navigatorHolder.setNavigator(navigator);
+
+        getSupportFragmentManager().addOnBackStackChangedListener(onBackStackChangedListener);
     }
 
     @Override
     protected void onPause() {
         navigatorHolder.removeNavigator();
+        getSupportFragmentManager().removeOnBackStackChangedListener(onBackStackChangedListener);
 
         super.onPause();
+    }
+
+    public void setToolbarTitle(String newTitle) {
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar == null) return;
+
+        actionBar.setTitle(newTitle);
+    }
+
+    private void updateToolbarBackButton() {
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar == null) return;
+
+        if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        } else {
+            actionBar.setDisplayHomeAsUpEnabled(false);
+        }
     }
 }

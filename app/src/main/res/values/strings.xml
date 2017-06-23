@@ -4,4 +4,5 @@
     <string name="error_server_failure">Ошибка сервера. Попробуйте повторить запрос позже.</string>
     <string name="error_unknown_failure">неизвестная ошибка</string>
     <string name="action_retry">Повторить</string>
+    <string name="title_news_detail">Просмотр новости</string>
 </resources>

@@ -4,13 +4,13 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.Html;
+import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.arellomobile.mvp.MvpAppCompatFragment;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.example.tinkofftestapp.App;
@@ -18,13 +18,14 @@ import com.example.tinkofftestapp.R;
 import com.example.tinkofftestapp.data.model.NewsContent;
 import com.example.tinkofftestapp.presentation.newsdetail.NewsDetailPresenter;
 import com.example.tinkofftestapp.presentation.newsdetail.NewsDetailView;
+import com.example.tinkofftestapp.ui.fragment.BaseFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 
-public class NewsDetailFragment extends MvpAppCompatFragment implements NewsDetailView {
+public class NewsDetailFragment extends BaseFragment implements NewsDetailView {
     public static final String ARG_NEWS_ID = "ARG_NEWS_ID";
 
     @BindView(R.id.swipeRefreshLayout)
@@ -69,6 +70,13 @@ public class NewsDetailFragment extends MvpAppCompatFragment implements NewsDeta
         initViews();
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        setToolbarTitle(getString(R.string.title_news_detail));
+    }
+
     private void initViews() {
         swipeRefreshLayout.setColorSchemeResources(R.color.colorAccent);
         swipeRefreshLayout.setOnRefreshListener(() -> presenter.onSwipeToRefresh());
@@ -87,7 +95,10 @@ public class NewsDetailFragment extends MvpAppCompatFragment implements NewsDeta
     @Override
     public void setContent(NewsContent newsContent) {
         if (newsContent != null) {
-            contentTextView.setText(Html.fromHtml(newsContent.getContent()));
+            String title = Html.fromHtml(newsContent.getTitle().getText()).toString();
+            Spanned content = Html.fromHtml(newsContent.getContent());
+
+            contentTextView.setText(content);
         } else {
             contentTextView.setText("");
         }

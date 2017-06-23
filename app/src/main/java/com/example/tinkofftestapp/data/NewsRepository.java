@@ -9,9 +9,11 @@ import com.example.tinkofftestapp.data.network.model.ApiResult;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import io.reactivex.Single;
 
+@Singleton
 public class NewsRepository {
     private final TinkoffApiService apiService;
 
