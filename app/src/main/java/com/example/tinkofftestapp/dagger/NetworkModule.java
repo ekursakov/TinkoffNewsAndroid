@@ -26,18 +26,18 @@ public class NetworkModule {
     private final Interceptor USE_CACHE_ON_FAILURE_INTERCEPTOR = chain -> {
         Request request = chain.request();
 
+        if (request.cacheControl().noCache()) {
+            return chain.proceed(request);
+        }
+
         try {
             return chain.proceed(request);
         } catch (IOException e) {
-            if (request.cacheControl().noCache()) {
-                throw e;
-            } else {
-                Request requestFromCache = request.newBuilder()
-                        .cacheControl(CacheControl.FORCE_CACHE)
-                        .build();
+            Request requestFromCache = request.newBuilder()
+                    .cacheControl(CacheControl.FORCE_CACHE)
+                    .build();
 
-                return chain.proceed(requestFromCache);
-            }
+            return chain.proceed(requestFromCache);
         }
     };
 
