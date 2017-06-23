@@ -1,11 +1,13 @@
 package com.example.tinkofftestapp.data.network.model;
 
 import com.squareup.moshi.FromJson;
+import com.squareup.moshi.Json;
 import com.squareup.moshi.ToJson;
 
 import java.util.Date;
 
 public class DateJson {
+    @Json(name = "milliseconds")
     private final long milliseconds;
 
     public DateJson(long milliseconds) {

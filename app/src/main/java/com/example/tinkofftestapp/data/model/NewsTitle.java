@@ -1,12 +1,19 @@
 package com.example.tinkofftestapp.data.model;
 
+import com.squareup.moshi.Json;
+
 import java.util.Date;
 
 public class NewsTitle {
+    @Json(name = "id")
     private final String id;
+    @Json(name = "name")
     private final String name;
+    @Json(name = "text")
     private final String text;
+    @Json(name = "publicationDate")
     private final Date publicationDate;
+    @Json(name = "bankInfoTypeId")
     private final Integer bankInfoTypeId;
 
     public NewsTitle(String id, String name, String text, Date publicationDate, Integer bankInfoTypeId) {
