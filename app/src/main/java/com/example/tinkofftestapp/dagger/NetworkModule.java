@@ -2,8 +2,8 @@ package com.example.tinkofftestapp.dagger;
 
 import android.content.Context;
 
-import com.example.tinkofftestapp.data.network.DateAdapter;
 import com.example.tinkofftestapp.data.network.TinkoffApiService;
+import com.example.tinkofftestapp.data.network.model.DateJson;
 import com.squareup.moshi.Moshi;
 
 import java.io.IOException;
@@ -61,7 +61,7 @@ public class NetworkModule {
     @Singleton
     Moshi provideMoshi() {
         return new Moshi.Builder()
-                .add(new DateAdapter())
+                .add(new DateJson.Adapter())
                 .build();
     }
 

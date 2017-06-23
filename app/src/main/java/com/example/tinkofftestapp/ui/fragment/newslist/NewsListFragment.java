@@ -100,7 +100,12 @@ public class NewsListFragment extends BaseFragment
 
     @Override
     public void setItems(List<NewsTitle> items) {
-        adapter.set(items);
+        if (items != null) {
+            swipeRefreshLayout.setVisibility(View.VISIBLE);
+            adapter.set(items);
+        } else {
+            swipeRefreshLayout.setVisibility(View.GONE);
+        }
     }
 
     @Override

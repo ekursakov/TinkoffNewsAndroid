@@ -95,12 +95,14 @@ public class NewsDetailFragment extends BaseFragment implements NewsDetailView {
     @Override
     public void setContent(NewsContent newsContent) {
         if (newsContent != null) {
+            swipeRefreshLayout.setVisibility(View.VISIBLE);
+
             String title = Html.fromHtml(newsContent.getTitle().getText()).toString();
             Spanned content = Html.fromHtml(newsContent.getContent());
 
             contentTextView.setText(content);
         } else {
-            contentTextView.setText("");
+            swipeRefreshLayout.setVisibility(View.GONE);
         }
     }
 
