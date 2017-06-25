@@ -2,7 +2,6 @@ package com.example.tinkofftestapp.data.network;
 
 import com.example.tinkofftestapp.data.model.NewsContent;
 import com.example.tinkofftestapp.data.model.NewsTitle;
-import com.example.tinkofftestapp.data.network.model.ApiResult;
 
 import java.util.List;
 
@@ -15,10 +14,10 @@ public interface TinkoffApiService {
     String BASE_URL = "https://api.tinkoff.ru/v1/";
 
     @GET("news")
-    Single<ApiResult<List<NewsTitle>>> getNews(@Header("Cache-Control") String cacheControlHeader);
+    Single<List<NewsTitle>> getNews(@Header("Cache-Control") String cacheControlHeader);
 
     @GET("news_content")
-    Single<ApiResult<NewsContent>> getNewsContent(
+    Single<NewsContent> getNewsContent(
             @Query("id") String id,
             @Header("Cache-Control") String cacheControlHeader);
 }

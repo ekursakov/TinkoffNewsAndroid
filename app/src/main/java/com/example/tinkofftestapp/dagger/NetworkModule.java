@@ -3,6 +3,7 @@ package com.example.tinkofftestapp.dagger;
 import android.content.Context;
 
 import com.example.tinkofftestapp.data.network.TinkoffApiService;
+import com.example.tinkofftestapp.data.network.converter.UnwrapTinkoffApiResponseConverterFactory;
 import com.example.tinkofftestapp.data.network.model.DateJson;
 import com.squareup.moshi.Moshi;
 
@@ -72,6 +73,7 @@ public class NetworkModule {
                 .baseUrl(TinkoffApiService.BASE_URL)
                 .client(client)
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.createAsync())
+                .addConverterFactory(UnwrapTinkoffApiResponseConverterFactory.create())
                 .addConverterFactory(MoshiConverterFactory.create(moshi))
                 .build();
     }

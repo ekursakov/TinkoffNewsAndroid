@@ -2,9 +2,7 @@ package com.example.tinkofftestapp.data;
 
 import com.example.tinkofftestapp.data.model.NewsContent;
 import com.example.tinkofftestapp.data.model.NewsTitle;
-import com.example.tinkofftestapp.data.network.TinkoffApiException;
 import com.example.tinkofftestapp.data.network.TinkoffApiService;
-import com.example.tinkofftestapp.data.network.model.ApiResult;
 
 import java.util.List;
 
@@ -25,22 +23,11 @@ public class NewsRepository {
     }
 
     public Single<List<NewsTitle>> getNewsList(boolean force) {
-        return apiService
-                .getNews(force ? CACHE_CONTROL_FORCE_NETWORK : null)
-                .map(this::handleServerError);
+        return apiService.getNews(force ? CACHE_CONTROL_FORCE_NETWORK : null);
     }
 
     public Single<NewsContent> getNewsContent(String id, boolean force) {
-        return apiService
-                .getNewsContent(id, force ? CACHE_CONTROL_FORCE_NETWORK : null)
-                .map(this::handleServerError);
+        return apiService.getNewsContent(id, force ? CACHE_CONTROL_FORCE_NETWORK : null);
     }
 
-    private <T> T handleServerError(ApiResult<T> result) {
-        if ("OK".equals(result.getResultCode())) {
-            return result.getPayload();
-        } else {
-            throw new TinkoffApiException("Bad result code: " + result.getResultCode());
-        }
-    }
 }

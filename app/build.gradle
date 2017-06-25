@@ -46,7 +46,7 @@ ext {
     supportLibsVersion = '25.4.0'
     butterKnifeVersion = '8.6.0'
     moxyVersion = '1.5.3'
-    retrofitVersion = '2.2.0'
+    retrofitVersion = '2.3.0'
     moshiVersion = '1.5.0'
     daggerVersion = '2.8'
 }
