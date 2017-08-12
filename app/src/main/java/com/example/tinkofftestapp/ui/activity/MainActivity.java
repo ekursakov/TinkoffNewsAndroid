@@ -1,11 +1,12 @@
 package com.example.tinkofftestapp.ui.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
-import android.widget.Toast;
 
 import com.arellomobile.mvp.MvpAppCompatActivity;
 import com.arellomobile.mvp.presenter.InjectPresenter;
@@ -24,7 +25,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import ru.terrakok.cicerone.Navigator;
 import ru.terrakok.cicerone.NavigatorHolder;
-import ru.terrakok.cicerone.android.SupportFragmentNavigator;
+import ru.terrakok.cicerone.android.SupportAppNavigator;
+import ru.terrakok.cicerone.commands.Command;
+import ru.terrakok.cicerone.commands.Forward;
 
 public class MainActivity extends MvpAppCompatActivity implements MainView {
 
@@ -37,8 +40,12 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
     @InjectPresenter
     MainPresenter presenter;
 
-    private Navigator navigator = new SupportFragmentNavigator(
-            getSupportFragmentManager(), R.id.container) {
+    private Navigator navigator = new SupportAppNavigator(this, R.id.container) {
+        @Override
+        protected Intent createActivityIntent(String screenKey, Object data) {
+            return null;
+        }
+
         @Override
         protected Fragment createFragment(String screenKey, Object data) {
             switch (screenKey) {
@@ -59,13 +66,19 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
         }
 
         @Override
-        protected void showSystemMessage(String message) {
-            Toast.makeText(MainActivity.this, message, Toast.LENGTH_SHORT).show();
-        }
-
-        @Override
-        protected void exit() {
-            finish();
+        protected void setupFragmentTransactionAnimation(
+                Command command,
+                Fragment currentFragment,
+                Fragment nextFragment,
+                FragmentTransaction fragmentTransaction
+        ) {
+            if (command instanceof Forward) {
+                fragmentTransaction.setCustomAnimations(
+                        R.anim.slide_in_right,
+                        R.anim.slide_out_left,
+                        R.anim.slide_in_left,
+                        R.anim.slide_out_right);
+            }
         }
     };
 
