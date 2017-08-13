@@ -97,7 +97,7 @@ public class NewsDetailFragment extends MvpAppCompatFragment implements NewsDeta
             swipeRefreshLayout.setVisibility(View.VISIBLE);
 
             contentWebView.setVisibility(View.VISIBLE);
-            contentWebView.loadData(newsContent.getContent(), "text/html", "UTF-8");
+            contentWebView.loadDataWithBaseURL(null, newsContent.getContentAsHtml(), "text/html", "UTF-8", null);
         } else {
             swipeRefreshLayout.setVisibility(View.GONE);
         }

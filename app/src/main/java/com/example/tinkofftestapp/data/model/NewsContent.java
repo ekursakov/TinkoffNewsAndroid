@@ -36,4 +36,8 @@ public class NewsContent {
     public String getContent() {
         return content;
     }
+
+    public String getContentAsHtml() {
+        return "<!DOCTYPE html><html><head><meta charset=\"utf-8\"/></head>" + content + "</html>";
+    }
 }
