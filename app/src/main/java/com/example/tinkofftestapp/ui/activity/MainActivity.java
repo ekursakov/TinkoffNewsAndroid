@@ -5,8 +5,9 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.ActionBar;
-import android.support.v7.widget.Toolbar;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextSwitcher;
 
 import com.arellomobile.mvp.MvpAppCompatActivity;
 import com.arellomobile.mvp.presenter.InjectPresenter;
@@ -23,6 +24,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import ru.terrakok.cicerone.Navigator;
 import ru.terrakok.cicerone.NavigatorHolder;
 import ru.terrakok.cicerone.android.SupportAppNavigator;
@@ -34,8 +36,11 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
     @Inject
     NavigatorHolder navigatorHolder;
 
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
+    @BindView(R.id.ivToolbarNavigation)
+    ImageView toolbarNavigationImageView;
+
+    @BindView(R.id.tsToolbarTitle)
+    TextSwitcher toolbarTitleTextSwitcher;
 
     @InjectPresenter
     MainPresenter presenter;
@@ -99,10 +104,6 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        setSupportActionBar(toolbar);
-
-        toolbar.setNavigationOnClickListener(v -> onBackPressed());
-
         updateToolbarBackButton();
     }
 
@@ -123,14 +124,23 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
         super.onPause();
     }
 
-    private void updateToolbarBackButton() {
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar == null) return;
+    @Override
+    protected void onTitleChanged(CharSequence title, int color) {
+        super.onTitleChanged(title, color);
 
+        toolbarTitleTextSwitcher.setText(title);
+    }
+
+    @OnClick(R.id.ivToolbarNavigation)
+    void onToolbarNavigationClick() {
+        onBackPressed();
+    }
+
+    private void updateToolbarBackButton() {
         if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
+            toolbarNavigationImageView.setVisibility(View.VISIBLE);
         } else {
-            actionBar.setDisplayHomeAsUpEnabled(false);
+            toolbarNavigationImageView.setVisibility(View.GONE);
         }
     }
 }
